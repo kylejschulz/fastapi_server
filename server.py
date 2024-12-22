@@ -1,5 +1,5 @@
 #uvicorn server:app --reload
-# curl -X POST "http://143.198.30.142:8000/deploy/static/subdomain/test-subdomain" \ 
+# curl -X POST "http://143.198.30.142:8000/deploy/static/subdomain/test-subdomain" \
 # -F "file=@/Users/kyleschulz/Desktop/index.html"
 #pip install python-multipart
 
@@ -20,7 +20,7 @@ async def deploy_static(
     subdomain: str = Path(..., description="The subdomain to deploy"),
     files: List[UploadFile] = File(..., description="The files to upload"),
 ):
-    
+
     saved_files = []
 
     for file in files:
@@ -57,13 +57,15 @@ async def delete_static(
     remove_nginx_site(subdomain)
     delete_subdomain_dir(subdomain)
     delete_symlink(subdomain)
-    
+
     return {
         "message": "Files deleted successfully",
         "subdomain": subdomain,
     }
 
-
+@app.get("/health")
+async def health_check():
+    return {"status": "ok"}
 # To run the server, save this code to a file (e.g., `server.py`) and run:
 # `uvicorn server:app --reload`
 
